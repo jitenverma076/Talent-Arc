@@ -1,0 +1,56 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Allow authenticated users to read and write their own data
+    match /users/{userId} {
+      // Allow user to read/write their own data
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+      // Allow anyone to create user documents during sign up
+      allow create: if request.resource.data.uid == userId;
+    }
+    
+    // Allow contact form submissions
+    match /contacts/{contactId} {
+      // Anyone can create contact submissions
+      allow create: if true;
+      // Only the user who created the contact or admins can read it
+      allow read: if request.auth != null && 
+                   (resource.data.userId == request.auth.uid || 
+                   get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin');
+      // Only admins can update contact status
+      allow update: if request.auth != null && 
+                     get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    // Allow users to read and write their own activities
+    match /activities/{activityId} {
+      allow read, write: if request.auth != null && 
+                           resource.data.userId == request.auth.uid;
+      // Allow creation if user sets their own ID as owner
+      allow create: if request.auth != null && 
+                      request.resource.data.userId == request.auth.uid;
+    }
+    
+    // Allow users to read challenge details
+    match /challenges/{challengeId} {
+      allow read: if request.auth != null;
+      // Only admins can create/update challenges
+      allow write: if request.auth != null && 
+                     get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    // Allow users to read company details
+    match /companies/{companyId} {
+      allow read: if request.auth != null;
+      // Only admins or the company themselves can write
+      allow write: if request.auth != null && 
+                     (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' ||
+                      get(/databases/$(database)/documents/users/$(request.auth.uid)).data.companyId == companyId);
+    }
+    
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+} 

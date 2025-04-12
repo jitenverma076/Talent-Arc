@@ -1,0 +1,183 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Colors */
+    --background: #ffffff;
+    --foreground: #18181b;
+    --card: #ffffff;
+    --card-foreground: #18181b;
+    --primary: #2563eb;
+    --primary-foreground: #ffffff;
+    --secondary: #f8fafc;
+    --secondary-foreground: #18181b;
+    --muted: #f1f5f9;
+    --muted-foreground: #64748b;
+    --accent: #f8fafc;
+    --accent-foreground: #18181b;
+    --border: #e2e8f0;
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+    --gradient-secondary: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    --gradient-accent: linear-gradient(135deg, #3b82f6 0%, #2563eb 50%, #1d4ed8 100%);
+
+    /* Border Radius */
+    --radius-sm: 0.5rem;
+    /* 8px */
+    --radius-md: 0.75rem;
+    /* 12px */
+    --radius-lg: 1rem;
+    /* 16px */
+    --radius-xl: 1.25rem;
+    /* 20px */
+    --radius-2xl: 1.5rem;
+    /* 24px */
+  }
+
+  .dark {
+    --background: #0f172a;
+    --foreground: #f8fafc;
+    --card: #1e293b;
+    --card-foreground: #f8fafc;
+    --primary: #3b82f6;
+    --primary-foreground: #ffffff;
+    --secondary: #1e293b;
+    --secondary-foreground: #f8fafc;
+    --muted: #1e293b;
+    --muted-foreground: #94a3b8;
+    --accent: #2563eb;
+    --accent-foreground: #ffffff;
+    --border: #334155;
+
+    /* Dark mode gradients */
+    --gradient-primary: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    --gradient-secondary: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    --gradient-accent: linear-gradient(135deg, #60a5fa 0%, #3b82f6 50%, #2563eb 100%);
+  }
+
+  html {
+    font-family: 'Inter var', system-ui, -apple-system, sans-serif;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  /* Ensure text is always visible */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply text-foreground font-semibold;
+  }
+
+  p {
+    @apply text-foreground;
+  }
+}
+
+@layer components {
+
+  /* Card styles */
+  .card {
+    @apply bg-card text-card-foreground border border-border rounded-2xl p-6 shadow-sm backdrop-blur-sm transition-all duration-200;
+  }
+
+  .card:hover {
+    @apply shadow-md border-accent;
+  }
+
+  .card-gradient {
+    @apply relative overflow-hidden;
+    background: var(--gradient-secondary);
+  }
+
+  /* Button styles */
+  .btn {
+    @apply inline-flex items-center justify-center rounded-xl px-4 py-2 text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:pointer-events-none disabled:opacity-50;
+  }
+
+  .btn-primary {
+    @apply btn text-primary-foreground hover:opacity-90;
+    background: var(--gradient-primary);
+  }
+
+  .btn-secondary {
+    @apply btn bg-secondary text-secondary-foreground hover:bg-secondary hover:opacity-80;
+  }
+
+  .btn-outline {
+    @apply btn border border-border bg-background backdrop-blur-sm text-foreground;
+  }
+
+  .btn-outline:hover {
+    @apply bg-accent border-accent;
+  }
+
+  /* Input styles */
+  .input {
+    @apply flex h-10 w-full rounded-xl border border-border bg-background backdrop-blur-sm px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:border-primary disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-200;
+  }
+
+  .input:hover {
+    @apply border-accent;
+  }
+
+  /* Link styles */
+  .link {
+    @apply text-primary hover:opacity-80 underline-offset-4 hover:underline transition-colors;
+  }
+
+  .link-muted {
+    @apply text-muted-foreground hover:text-foreground transition-colors;
+  }
+
+  /* Container styles */
+  .container-lg {
+    @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Gradient text */
+  .gradient-text {
+    @apply bg-clip-text text-transparent;
+    background-image: var(--gradient-accent);
+  }
+
+  /* Glass effect */
+  .glass {
+    @apply bg-background backdrop-blur-sm border border-border;
+  }
+
+  .glass:hover {
+    @apply border-accent bg-accent/5;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  @apply w-2 h-2;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-muted rounded-full;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply rounded-full transition-colors bg-accent;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-accent-foreground;
+}
